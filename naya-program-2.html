@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نايا 🌸 برنامجي الأسبوعي</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rose:#f43f5e;--rose-light:#fda4af;
+  --plum:#7c3aed;--plum-light:#c4b5fd;
+  --amber:#f59e0b;--amber-light:#fde68a;
+  --teal:#0d9488;--teal-light:#99f6e4;
+  --ink:#1a0a1e;--text:#fdf4ff;--sub:#d8b4fe;--muted:#9b7db8;
+  --glass:rgba(255,255,255,0.06);--border:rgba(244,63,94,0.2);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--ink);background-image:radial-gradient(ellipse at 20% 10%,#3d1f4a88 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,#1e1b4b66 0%,transparent 60%);color:var(--text);font-family:'IBM Plex Sans Arabic',sans-serif;min-height:100vh;direction:rtl;}
+#app{max-width:480px;margin:0 auto;min-height:100vh;}
+#content{padding:16px 14px 90px;}
+#bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(26,10,30,0.96);backdrop-filter:blur(16px);border-top:1px solid rgba(244,63,94,0.25);display:flex;z-index:50;}
+.nav-btn{flex:1;padding:10px 4px 8px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:10px;font-weight:600;font-family:'IBM Plex Sans Arabic',sans-serif;display:flex;flex-direction:column;align-items:center;gap:3px;transition:all 0.2s;border-top:2px solid transparent;}
+.nav-btn.active{color:var(--rose);border-top-color:var(--rose);}
+.nav-btn .ni{font-size:19px;}
+.card{background:var(--glass);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:20px;padding:16px;margin-bottom:12px;}
+.card-rose{border-color:rgba(244,63,94,0.35);background:rgba(244,63,94,0.07);}
+.card-plum{border-color:rgba(124,58,237,0.35);background:rgba(124,58,237,0.07);}
+.card-amber{border-color:rgba(245,158,11,0.35);background:rgba(245,158,11,0.07);}
+.card-teal{border-color:rgba(13,148,136,0.35);background:rgba(13,148,136,0.07);}
+.card-green{border-color:rgba(34,197,94,0.35);background:rgba(34,197,94,0.06);}
+.hero{background:linear-gradient(135deg,#7c3aed22,#f43f5e22,#0d948822);border:1px solid rgba(244,63,94,0.3);border-radius:24px;padding:20px 18px;margin-bottom:14px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-30px;left:-30px;width:120px;height:120px;background:radial-gradient(circle,#f43f5e22,transparent);border-radius:50%;}
+.hero-name{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#fff;}
+.stat-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:30px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--sub);margin:3px 3px 0 0;}
+.steps-circle{position:relative;display:flex;align-items:center;justify-content:center;}
+.steps-circle svg{transform:rotate(-90deg);}
+.steps-center{position:absolute;text-align:center;}
+.steps-num{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--rose);line-height:1;}
+.steps-label{font-size:10px;color:var(--muted);margin-top:2px;}
+.meal-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:7px;}
+.meal-tag.breakfast{background:rgba(245,158,11,0.15);color:var(--amber);border:1px solid rgba(245,158,11,0.3);}
+.meal-tag.snack{background:rgba(244,63,94,0.12);color:var(--rose-light);border:1px solid rgba(244,63,94,0.25);}
+.meal-tag.lunch{background:rgba(13,148,136,0.15);color:var(--teal-light);border:1px solid rgba(13,148,136,0.3);}
+.meal-tag.dinner{background:rgba(124,58,237,0.15);color:var(--plum-light);border:1px solid rgba(124,58,237,0.3);}
+.meal-item{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--sub);line-height:1.5;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.meal-dot{width:5px;height:5px;background:var(--rose);border-radius:50%;flex-shrink:0;margin-top:7px;}
+.done-meal-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px;border-radius:12px;border:1.5px solid;font-size:12px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans Arabic',sans-serif;margin-top:8px;transition:all 0.2s;}
+.done-meal-btn.off{border-color:rgba(255,255,255,0.1);background:transparent;color:var(--muted);}
+.done-meal-btn.on{border-color:#22c55e;background:rgba(34,197,94,0.12);color:#86efac;}
+.day-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none;}
+.day-tabs::-webkit-scrollbar{display:none;}
+.day-tab{flex:0 0 auto;padding:8px 14px;border-radius:20px;border:1.5px solid rgba(255,255,255,0.1);background:transparent;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans Arabic',sans-serif;transition:all 0.2s;white-space:nowrap;}
+.day-tab.active{background:var(--rose);border-color:var(--rose);color:#fff;box-shadow:0 4px 14px rgba(244,63,94,0.35);}
+.ex-card{background:var(--glass);border:1px solid rgba(124,58,237,0.25);border-radius:16px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s;}
+.ex-card.done-ex{background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.3);}
+.ex-icon-box{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.mot-card{background:linear-gradient(135deg,rgba(244,63,94,0.15),rgba(124,58,237,0.15));border:1px solid rgba(244,63,94,0.25);border-radius:20px;padding:20px;text-align:center;margin-bottom:12px;}
+.macro-bar-wrap{width:100%;height:8px;background:rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;}
+.macro-bar{height:100%;border-radius:10px;transition:width 0.8s cubic-bezier(.4,0,.2,1);}
+.prog-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.prog-label{font-size:12px;color:var(--sub);width:90px;flex-shrink:0;text-align:right;}
+.prog-track{flex:1;height:8px;background:rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:10px;transition:width 0.8s;}
+.prog-val{font-size:12px;font-weight:700;color:var(--text);width:55px;text-align:center;}
+.btn-rose{width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,#f43f5e,#e11d48);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans Arabic',sans-serif;box-shadow:0 6px 20px rgba(244,63,94,0.35);margin-bottom:10px;transition:transform 0.15s;}
+.btn-rose:active{transform:scale(0.98);}
+.btn-ghost{width:100%;padding:12px;border-radius:14px;border:1.5px solid rgba(244,63,94,0.3);background:transparent;color:var(--rose-light);font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans Arabic',sans-serif;margin-bottom:10px;}
+.challenge-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.07);background:var(--glass);cursor:pointer;transition:all 0.2s;}
+.challenge-item.done-ch{background:rgba(34,197,94,0.07);border-color:rgba(34,197,94,0.25);}
+.ch-check{width:26px;height:26px;border-radius:50%;flex-shrink:0;border:2px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:13px;transition:all 0.2s;}
+.ch-check.done{background:#22c55e;border-color:#22c55e;}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(6px);z-index:100;display:flex;align-items:flex-end;justify-content:center;}
+.modal-box{background:#1a0a1e;border:1px solid rgba(244,63,94,0.3);border-radius:24px 24px 0 0;padding:24px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;}
+.hidden{display:none!important;}
+.fade-in{animation:fi 0.3s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.steps-input{width:100%;background:rgba(255,255,255,0.06);border:1.5px solid rgba(244,63,94,0.3);border-radius:12px;padding:12px 14px;color:var(--text);font-size:20px;font-family:'IBM Plex Sans Arabic',sans-serif;text-align:center;outline:none;}
+.steps-input:focus{border-color:var(--rose);}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f43f5e,#e11d48);color:#fff;padding:10px 22px;border-radius:50px;font-weight:700;font-size:13px;z-index:300;box-shadow:0 6px 20px rgba(244,63,94,0.4);opacity:0;transition:opacity 0.3s;pointer-events:none;font-family:'IBM Plex Sans Arabic',sans-serif;}
+.toast.show{opacity:1;}
+.section-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;font-family:'IBM Plex Sans Arabic',sans-serif;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.water-cup{width:36px;height:48px;border-radius:6px;border:none;cursor:pointer;font-size:18px;transition:all 0.2s;background:var(--border);}
+.water-cup.filled{background:linear-gradient(180deg,#7dd3fc,#0ea5e9);transform:scale(1.05);box-shadow:0 0 10px rgba(14,165,233,0.4);}
+.streak-flame{font-size:32px;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+.fasting-bar{position:relative;height:14px;border-radius:10px;background:rgba(255,255,255,0.06);overflow:hidden;margin:8px 0;}
+.fasting-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#7c3aed,#f43f5e);transition:width 1s;}
+.tip-card{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--sub);line-height:1.6;margin-bottom:8px;}
+.dance-bar{position:relative;height:10px;border-radius:10px;background:rgba(255,255,255,0.06);overflow:hidden;margin:8px 0;}
+.dance-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#f43f5e,#f59e0b,#a3e635);transition:width 0.8s;}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="content"></div>
+  <nav id="bottom-nav">
+    <button class="nav-btn active" data-tab="home" onclick="go('home')"><span class="ni">✨</span>اليوم</button>
+    <button class="nav-btn" data-tab="plan" onclick="go('plan')"><span class="ni">🍽</span>خطتي</button>
+    <button class="nav-btn" data-tab="exercise" onclick="go('exercise')"><span class="ni">💪</span>رياضة</button>
+    <button class="nav-btn" data-tab="macros" onclick="go('macros')"><span class="ni">📊</span>ماكروز</button>
+    <button class="nav-btn" data-tab="motiv" onclick="go('motiv')"><span class="ni">🔥</span>تحفيز</button>
+  </nav>
+</div>
+
+<div id="stepsModal" class="modal-ov hidden">
+  <div class="modal-box">
+    <div style="font-size:18px;font-weight:800;text-align:center;margin-bottom:16px;">👟 كم خطوة مشيتِ؟</div>
+    <input type="number" id="stepsInput" class="steps-input" placeholder="مثال: 7500">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;">
+      <button onclick="closeSteps()" style="padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:none;color:var(--muted);cursor:pointer;font-family:'IBM Plex Sans Arabic',sans-serif;">إلغاء</button>
+      <button onclick="saveSteps()" style="padding:12px;border-radius:12px;border:none;background:var(--rose);color:#fff;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans Arabic',sans-serif;">حفظ 🌸</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+var NAME='نايا', AGE=26, HEIGHT=158, WEIGHT=60;
+var GOAL_CALS=1300, TOTAL_CALS=1900, STEPS_GOAL=10000;
+var WATER_GOAL=10, DANCE_GOAL=30;
+var DR_PHONE='963991863344';
+
+var PLAN=[
+  {day:1,label:'الخميس',
+   breakfast:['بيضتان مسلوقتان','خبز أسمر 60غ','خضار طازجة','لبنة قليلة الدسم 40غ'],
+   snack1:['حليب قليل الدسم 200مل','شوكولا دارك 10غ','أو كبتشينو'],
+   lunch:['كوسا محشي 5 حبات متوسطة','سلطة لبن وخيار صحن كبير'],
+   snack2:['تفاحة مع رشة قرفة وفول سوداني معلقة صغيرة'],
+   dinner:['تونة بالماء مصفاة 100غ','سلطة خضراء مع التونة']},
+  {day:2,label:'الجمعة',
+   breakfast:['شوفان 50غ','حليب 250مل','قرفة'],
+   snack1:['شوكولا دارك 15غ'],
+   lunch:['شيش طاووق مشوي 150غ','رز مطبوخ 120غ','سلطة فتوش'],
+   snack2:['لبن قليل الدسم 170غ'],
+   dinner:['جبنة بيضاء قليلة الدسم 60غ','خضار']},
+  {day:3,label:'السبت',
+   breakfast:['فول بالليمون واللبن 150غ','خبز أسمر 50غ'],
+   snack1:['كاكاو: حليب قليل الدسم 200مل + ملعقة كاكاو خام'],
+   lunch:['يبرق 10 قطع متوسطة','سلطة'],
+   snack2:['برتقالة أو كيوي'],
+   dinner:['بيضتان أومليت مع الخضار']},
+  {day:4,label:'الأحد',
+   breakfast:['لبنة 60غ','زيت زيتون ملعقة صغيرة','خبز أسمر 60غ','زيتون 6 حبات'],
+   snack1:['اختياري — لا يتجاوز 100 سعرة'],
+   lunch:['لحمة بالصينية 150غ أو بطاطا بالفرن 150غ','سلطة'],
+   snack2:['حليب 200مل مع معلقتين كبتشينو فرط'],
+   dinner:['سلطة تونة وبيضتان مسلوقتان']},
+  {day:5,label:'الاثنين',
+   breakfast:['بيضتان','خضار','خبز أسمر 50غ','جبنة أو لبنة اختياري'],
+   snack1:['لاتيه منزلي بحليب جوز الهند أو قليل الدسم'],
+   lunch:['محشي 4 حبات','لبن 200غ'],
+   snack2:['خوخة أو دراق'],
+   dinner:['جبنة قريش 100غ','قطعتان توست']},
+  {day:6,label:'الثلاثاء',
+   breakfast:['مناقيش زعتر منزلية 80غ','خضار'],
+   snack1:['شوكولا دارك 10غ','قهوة بدون سكر'],
+   lunch:['كباب مشوي 150غ','تبولة'],
+   snack2:['لبن قليل الدسم منكه مع توت ولوز'],
+   dinner:['بيضتان مسلوقتان وخيار وبندورة']},
+  {day:7,label:'الأربعاء',
+   breakfast:['شوفان 50غ','حليب 250مل','موزة صغيرة'],
+   snack1:['شوكولا دارك 15غ أو كبتشينو'],
+   lunch:['ملوخية مع دجاج 150غ','رز مطبوخ 100غ'],
+   snack2:['تفاحة'],
+   dinner:['سلطة يونانية خفيفة']}
+];
+
+var EXERCISES={
+  daily:[
+    {id:'breathing',name:'التنفس الحجابي + سحب البطن',dur:'10 دقائق',emoji:'🫁',desc:'تنفس عميق مع سحب البطن للداخل قدر الإمكان'},
+    {id:'kegel',name:'تمارين كيجل مع التنفس',dur:'10 دقائق',emoji:'🧘',desc:'تمارين قاع الحوض بالتزامن مع التنفس'}
+  ],
+  rehab:[
+    {id:'heel',name:'Heel Slides',dur:'3x15 تكرار',emoji:'🦵',desc:'تحريك الكعب على الأرض مع تثبيت الجذع'},
+    {id:'march',name:'Marching',dur:'3x15 تكرار',emoji:'🚶',desc:'رفع القدمين بالتناوب أثناء الاستلقاء'}
+  ],
+  resistance:[
+    {id:'resist',name:'تمارين مقاومة منزلية',dur:'30-45 دقيقة',emoji:'💪',desc:'3 أيام فقط — بعيداً عن الكرنش والسيت أب!'}
+  ],
+  dance:[
+    {id:'dance',name:'رقص حر مسائي 🎵',dur:'30 دقيقة هدف',emoji:'💃',desc:'ابدئي بأغنية وبعدين 3 وبعدين 5 — شغّلي بليستك المفضلة!'}
+  ]
+};
+
+var MOTIVATIONS=[
+  {emoji:'🔥',text:'نايا، جسمك يحتاج منك ثلاثة أشياء فقط: ثبات، تنفس، ووقت.'},
+  {emoji:'🌸',text:'كل مرة تلتزمين بوجبتك مع الدكتورة — أنتِ تبنين ثقة بنفسك أقوى من أي رقم على الميزان.'},
+  {emoji:'💃',text:'الرقص مش بس رياضة — هو متعة! 30 دقيقة رقص = 200 سعرة. شغّلي أغنيتك المفضلة وابدئي!'},
+  {emoji:'✨',text:'الفرق بين من تريدين أن تكوني وبين من أنتِ الآن = عدد مرات ما توقفتِ!'},
+  {emoji:'🌙',text:'المساء وقتك الذهبي — رقصة، ثم تنفس، ثم نوم عميق. هذه ثلاثية التحول!'},
+  {emoji:'👟',text:'10,000 خطوة تبدو كتيرة؟ قسّميها: 2k صباح، 3k ظهر، 5k مساء. خلصت!'},
+  {emoji:'💧',text:'الماء أول دواء! 10 أكواب يومياً = طاقة، بشرة أحلى، وتخسين أسرع.'},
+  {emoji:'🍫',text:'الشوكولا الداركة في برنامجك ليست مكافأة — هي جزء من الخطة! استمتعي بها.'},
+  {emoji:'⚡',text:'26 سنة، 158 سم، 60 كغ — أنتِ قريبة جداً من هدفك!'},
+  {emoji:'🎯',text:'الصيام المتقطع + الرياضة المسائية = مزيج مثالي اختارته الدكتورة خصيصاً لك!'}
+];
+
+var CHALLENGES=[
+  {id:'water',label:'💧 شربتِ 10 أكواب ماء'},
+  {id:'fasting',label:'⏰ التزمتِ بالصيام المتقطع'},
+  {id:'sleep',label:'🌙 نمتِ قبل منتصف الليل'},
+  {id:'protein',label:'🥩 أكلتِ بروتين في كل وجبة'},
+  {id:'nosugar',label:'🚫 ما أضفتِ سكر للمشروبات'},
+  {id:'steps',label:'👟 وصلتِ 10,000 خطوة'},
+  {id:'drplan',label:'📋 التزمتِ بخطة الدكتورة كاملاً'}
+];
+
+var tab='home', selDay=0, motIdx=0;
+function todayKey(){return new Date().toISOString().slice(0,10);}
+function loadD(){try{return JSON.parse(localStorage.getItem('naya_v3')||'{}');}catch(e){return{};}}
+function saveD(){try{localStorage.setItem('naya_v3',JSON.stringify(D));}catch(e){}}
+var D=loadD();
+function td(){if(!D[todayKey()])D[todayKey()]={};return D[todayKey()];}
+function upd(k,v){var t=td();t[k]=v;saveD();render();}
+function updMany(obj){var t=td();for(var k in obj)t[k]=obj[k];saveD();render();}
+
+function go(t){
+  tab=t;
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.toggle('active',b.dataset.tab===t);});
+  var c=document.getElementById('content');
+  c.style.opacity='0';
+  setTimeout(function(){render();c.style.opacity='1';},120);
+}
+
+function render(){
+  var c=document.getElementById('content');
+  if(tab==='home')c.innerHTML=renderHome();
+  else if(tab==='plan')c.innerHTML=renderPlan();
+  else if(tab==='exercise')c.innerHTML=renderExercise();
+  else if(tab==='macros')c.innerHTML=renderMacros();
+  else if(tab==='motiv')c.innerHTML=renderMotiv();
+}
+
+function getStreak(){
+  var s=0,d=new Date();
+  for(var i=0;i<30;i++){
+    var k=d.toISOString().slice(0,10);
+    if(D[k]&&(D[k].steps>=STEPS_GOAL||D[k]['meal_lunch'])){s++;d.setDate(d.getDate()-1);}
+    else break;
+  }
+  return s;
+}
+
+function renderHome(){
+  var t=td();
+  var steps=t.steps||0;
+  var water=t.water||0;
+  var dance=t.dance||0;
+  var stepsPct=Math.min(100,Math.round(steps/STEPS_GOAL*100));
+  var r=52,circ=2*Math.PI*r,off=circ-(stepsPct/100)*circ;
+  var streak=getStreak();
+  var doneCh=CHALLENGES.filter(function(c){return t[c.id];}).length;
+  var mot=MOTIVATIONS[motIdx%MOTIVATIONS.length];
+  var fastH=t.fastingHours||0;
+  var fastPct=Math.min(100,Math.round(fastH/16*100));
+
+  var glassesHtml='';
+  for(var i=0;i<WATER_GOAL;i++){
+    glassesHtml+='<button class="water-cup '+(i<water?'filled':'')+'" onclick="setWater('+(i<water?i:i+1)+')">💧</button>';
+  }
+
+  var danceBlocks='';
+  var danceSteps=[5,10,15,20,25,30];
+  for(var j=0;j<danceSteps.length;j++){
+    var ds=danceSteps[j];
+    var active=dance>=ds;
+    danceBlocks+='<button onclick="setDance('+ds+')" style="flex:1;padding:7px 0;border-radius:8px;border:1px solid '+(active?'var(--rose)':'rgba(255,255,255,0.08)')+';background:'+(active?'rgba(244,63,94,0.2)':'transparent')+';color:'+(active?'var(--rose-light)':'var(--muted)')+';font-size:11px;font-weight:700;cursor:pointer;font-family:\'IBM Plex Sans Arabic\',sans-serif;">'+ds+'د</button>';
+  }
+
+  var chHtml='';
+  for(var ci=0;ci<CHALLENGES.length;ci++){
+    var ch=CHALLENGES[ci];
+    var chDone=!!t[ch.id];
+    chHtml+='<div class="challenge-item '+(chDone?'done-ch':'')+'" onclick="toggleCh(\''+ch.id+'\')"><div class="ch-check '+(chDone?'done':'')+'">'+(chDone?'✓':'')+' </div><span style="font-size:13px;color:'+(chDone?'#dcfce7':'var(--sub)')+';">'+ch.label+'</span>'+(chDone?'<span style="margin-right:auto;font-size:11px;color:#86efac;">تم 💚</span>':'')+' </div>';
+  }
+
+  return '<div class="fade-in">'
+    +'<div class="hero" style="margin-bottom:14px;">'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1;">'
+        +'<div>'
+          +'<div style="font-size:11px;color:var(--rose-light);font-weight:600;margin-bottom:3px;">أسبوعي الأول 🌸</div>'
+          +'<div class="hero-name">'+NAME+'</div>'
+          +'<div style="font-size:12px;color:var(--sub);margin-top:3px;">هدف خسارة الوزن — مسائية 🌙</div>'
+          +'<div style="margin-top:8px;">'
+            +'<span class="stat-pill">⚖ 60 كغ</span>'
+            +'<span class="stat-pill">📏 158 سم</span>'
+            +'<span class="stat-pill">🎂 26 سنة</span>'
+          +'</div>'
+        +'</div>'
+        +'<div class="steps-circle" style="cursor:pointer;" onclick="openSteps()">'
+          +'<svg width="118" height="118"><circle cx="59" cy="59" r="'+r+'" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="9"/><circle cx="59" cy="59" r="'+r+'" fill="none" stroke="url(#sg)" stroke-width="9" stroke-dasharray="'+circ+'" stroke-dashoffset="'+off+'" stroke-linecap="round" style="transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset 1s;"/><defs><linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#f43f5e"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs></svg>'
+          +'<div class="steps-center"><div class="steps-num">'+(steps>=1000?(steps/1000).toFixed(1)+'k':steps)+'</div><div class="steps-label">خطوة 👟</div><div style="font-size:9px;color:var(--muted);">اضغطي</div></div>'
+        +'</div>'
+      +'</div>'
+    +'</div>'
+
+    +'<div class="mot-card">'
+      +'<div style="font-size:36px;margin-bottom:8px;">'+mot.emoji+'</div>'
+      +'<div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.6;">'+mot.text+'</div>'
+      +'<button onclick="nextMot()" style="margin-top:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:var(--sub);border-radius:20px;padding:5px 16px;font-size:11px;cursor:pointer;font-family:\'IBM Plex Sans Arabic\',sans-serif;">تشجيعة جديدة ✨</button>'
+    +'</div>'
+
+    +'<div class="grid3" style="margin-bottom:12px;">'
+      +'<div class="card" style="padding:12px;margin-bottom:0;text-align:center;"><div class="streak-flame">🔥</div><div style="font-family:\'Syne\',sans-serif;font-size:22px;font-weight:800;color:var(--amber);">'+streak+'</div><div style="font-size:10px;color:var(--muted);">يوم متتالي</div></div>'
+      +'<div class="card" style="padding:12px;margin-bottom:0;text-align:center;"><div style="font-size:22px;margin-bottom:2px;">✅</div><div style="font-family:\'Syne\',sans-serif;font-size:22px;font-weight:800;color:#86efac;">'+doneCh+'/7</div><div style="font-size:10px;color:var(--muted);">تحديات</div></div>'
+      +'<div class="card" style="padding:12px;margin-bottom:0;text-align:center;"><div style="font-size:22px;margin-bottom:2px;">🎯</div><div style="font-family:\'Syne\',sans-serif;font-size:22px;font-weight:800;color:var(--rose);">'+stepsPct+'%</div><div style="font-size:10px;color:var(--muted);">الخطوات</div></div>'
+    +'</div>'
+
+    +'<div class="card" style="border-color:rgba(14,165,233,0.3);background:rgba(14,165,233,0.06);margin-bottom:12px;">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">'
+        +'<div style="font-size:14px;font-weight:700;color:#7dd3fc;">💧 الماء اليومي</div>'
+        +'<span style="font-size:12px;font-weight:700;color:#7dd3fc;">'+water+'/'+WATER_GOAL+' أكواب</span>'
+      +'</div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:7px;justify-content:center;">'+glassesHtml+'</div>'
+      +'<div style="text-align:center;margin-top:8px;font-size:11px;color:var(--muted);">الهدف 2.5 لتر — كل كوب 250مل 💙</div>'
+    +'</div>'
+
+    +'<div class="card card-rose" style="margin-bottom:12px;">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">'
+        +'<div style="font-size:14px;font-weight:700;color:var(--rose-light);">💃 الرقص المسائي</div>'
+        +'<span style="font-size:12px;font-weight:700;color:var(--rose-light);">'+dance+'/'+DANCE_GOAL+' دقيقة</span>'
+      +'</div>'
+      +'<div class="dance-bar"><div class="dance-fill" style="width:'+Math.min(100,Math.round(dance/DANCE_GOAL*100))+'%;"></div></div>'
+      +'<div style="display:flex;gap:6px;margin-top:8px;">'+danceBlocks+'</div>'
+      +'<div style="font-size:11px;color:var(--muted);margin-top:6px;text-align:center;">شغّلي بليستك وارقصي! 30 دق = ~200 سعرة 🔥</div>'
+    +'</div>'
+
+    +'<div class="card card-plum" style="margin-bottom:12px;">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">'
+        +'<div style="font-size:13px;font-weight:700;color:var(--plum-light);">⏰ الصيام المتقطع 16 ساعة</div>'
+        +'<span class="badge" style="background:rgba(124,58,237,0.2);color:var(--plum-light);">5 أيام/أسبوع</span>'
+      +'</div>'
+      +'<div class="fasting-bar"><div class="fasting-fill" style="width:'+fastPct+'%;"></div></div>'
+      +'<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:3px;"><span>0</span><span style="color:#fbbf24;">16 ساعة الهدف</span><span>24</span></div>'
+      +'<div style="display:flex;gap:6px;margin-top:10px;">'
+        +[8,10,12,14,16,18].map(function(h){return '<button onclick="setFasting('+h+')" style="flex:1;padding:7px 0;border-radius:8px;border:1px solid '+(fastH>=h?'var(--plum)':'rgba(255,255,255,0.08)')+';background:'+(fastH>=h?'rgba(124,58,237,0.2)':'transparent')+';color:'+(fastH>=h?'var(--plum-light)':'var(--muted)')+';font-size:11px;font-weight:700;cursor:pointer;font-family:\'IBM Plex Sans Arabic\',sans-serif;">'+h+'س</button>';}).join('')
+      +'</div>'
+    +'</div>'
+
+    +'<div class="section-title">🎯 تحديات اليوم</div>'
+    +'<div style="margin-bottom:14px;">'+chHtml+'</div>'
+
+    +'<button class="btn-rose" onclick="openSteps()">👟 سجّلي خطواتك اليوم</button>'
+    +'<button class="btn-ghost" onclick="shareReport()">📤 شاركي تقريرك مع الدكتورة</button>'
+  +'</div>';
+}
+
+function renderMealBlock(label,key,items,type){
+  var t=td();
+  var done=!!t['meal_'+key];
+  var borderStyle=done?'border-color:rgba(34,197,94,0.3);background:rgba(34,197,94,0.05);':'';
+  var extraClass=type==='lunch'?'card-teal':type==='dinner'?'card-plum':'';
+  var itemsHtml=items.map(function(i){return '<div class="meal-item"><div class="meal-dot"></div><span>'+i+'</span></div>';}).join('');
+  return '<div class="card '+extraClass+'" style="margin-bottom:10px;'+borderStyle+'">'
+    +'<span class="meal-tag '+type+'">'+label+'</span>'
+    +itemsHtml
+    +'<button class="done-meal-btn '+(done?'on':'off')+'" onclick="toggleMeal(\''+key+'\')">'
+      +(done?'✅ تم — أحسنتِ! 🌸':'⭕ سجّلي إنجاز هالوجبة')
+    +'</button>'
+  +'</div>';
+}
+
+function renderPlan(){
+  var dayPlan=PLAN[selDay]||PLAN[0];
+  var tabsHtml=PLAN.map(function(p,i){return '<button class="day-tab '+(i===selDay?'active':'')+'" onclick="selectDay('+i+')">'+p.label+'</button>';}).join('');
+  var snacksOpt=['شوكولا دارك 85% — 10-15غ 🍫','حليب قليل الدسم 200مل مع كاكاو خام ☕','لبن يوناني 170غ + ملعقة كاكاو 🫙','بروتين بودر بالشوكولا مع ماء 💪','آيس كوفي بحليب قليل الدسم بدون سكر ☕'];
+
+  return '<div class="fade-in">'
+    +'<div class="section-title">🍽 خطتك الغذائية</div>'
+    +'<div class="day-tabs">'+tabsHtml+'</div>'
+    +'<div style="background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);border-radius:14px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">'
+      +'<div style="font-size:24px;">📅</div>'
+      +'<div><div style="font-size:14px;font-weight:700;color:var(--text);">'+dayPlan.label+'</div><div style="font-size:11px;color:var(--muted);">اضغطي على الوجبة لتسجيل إنجازها</div></div>'
+    +'</div>'
+    +renderMealBlock('الفطور 🌅','breakfast',dayPlan.breakfast,'breakfast')
+    +renderMealBlock('سناك 1 🍬','snack1',dayPlan.snack1,'snack')
+    +renderMealBlock('الغداء ☀','lunch',dayPlan.lunch,'lunch')
+    +renderMealBlock('سناك 2 🍬','snack2',dayPlan.snack2,'snack')
+    +renderMealBlock('العشاء 🌙','dinner',dayPlan.dinner,'dinner')
+    +'<div class="card" style="margin-top:4px;">'
+      +'<div style="font-size:13px;font-weight:700;color:var(--rose-light);margin-bottom:8px;">🍫 سناكات اختيارية</div>'
+      +snacksOpt.map(function(s){return '<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px;color:var(--muted);">• '+s+'</div>';}).join('')
+    +'</div>'
+    +'<button class="btn-rose" style="margin-top:12px;" onclick="shareDay()">📤 شاركي يومك مع الدكتورة</button>'
+  +'</div>';
+}
+
+function exCard(ex,doneArr){
+  var isDone=doneArr.indexOf(ex.id)>-1;
+  return '<div class="ex-card '+(isDone?'done-ex':'')+'" onclick="toggleEx(\''+ex.id+'\')"><div class="ex-icon-box" style="background:'+(isDone?'rgba(34,197,94,0.15)':'rgba(255,255,255,0.06)')+';">'+ex.emoji+'</div><div style="flex:1;"><div style="font-size:13px;font-weight:700;color:'+(isDone?'#dcfce7':'var(--text)')+';">'+ex.name+'</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">'+ex.dur+'</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">'+ex.desc+'</div></div><div style="font-size:20px;">'+(isDone?'✅':'⭕')+'</div></div>';
+}
+
+function renderExercise(){
+  var t=td();
+  var exDone=t.exDone||[];
+  var dance=t.dance||0;
+  var dancePct=Math.min(100,Math.round(dance/DANCE_GOAL*100));
+
+  var danceButtons=[5,10,15,20,25,30].map(function(d){
+    var a=dance>=d;
+    return '<button onclick="setDance('+d+')" style="flex:1;padding:7px 0;border-radius:8px;border:1px solid '+(a?'var(--rose)':'rgba(255,255,255,0.08)')+';background:'+(a?'rgba(244,63,94,0.2)':'transparent')+';color:'+(a?'var(--rose-light)':'var(--muted)')+';font-size:11px;font-weight:700;cursor:pointer;font-family:\'IBM Plex Sans Arabic\',sans-serif;">'+d+'د</button>';
+  }).join('');
+
+  return '<div class="fade-in">'
+    +'<div class="section-title">💪 رياضتك المسائية</div>'
+    +'<div class="tip-card" style="margin-bottom:12px;"><strong style="color:var(--amber);">تذكري:</strong> الكرنش والسيت أب <strong style="color:var(--rose);">ممنوعان</strong> — ركّزي على Diastasis Recti!</div>'
+
+    +'<div class="card card-rose" style="margin-bottom:12px;">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">'
+        +'<div style="font-size:14px;font-weight:700;color:var(--rose-light);">💃 الرقص المسائي</div>'
+        +'<span style="font-size:13px;font-weight:800;color:var(--rose);">'+dance+'/30 دقيقة</span>'
+      +'</div>'
+      +'<div class="dance-bar"><div class="dance-fill" style="width:'+dancePct+'%;"></div></div>'
+      +'<div style="display:flex;gap:6px;margin-top:8px;">'+danceButtons+'</div>'
+      +'<div style="font-size:12px;color:var(--sub);margin-top:10px;line-height:1.6;">🎵 شغّلي أغنيتك المفضلة — كل 5 دقائق رقص = ~33 سعرة<br>30 دقيقة رقص = ~200 سعرة و مزاج رائع! 🌸</div>'
+    +'</div>'
+
+    +'<div style="font-size:13px;font-weight:700;color:var(--sub);margin-bottom:10px;">🫁 تمارين يومية</div>'
+    +EXERCISES.daily.map(function(ex){return exCard(ex,exDone);}).join('')
+    +'<div style="font-size:13px;font-weight:700;color:var(--sub);margin:12px 0 10px;">🦵 تأهيل Diastasis Recti — 5 أيام/أسبوع</div>'
+    +EXERCISES.rehab.map(function(ex){return exCard(ex,exDone);}).join('')
+    +'<div style="font-size:13px;font-weight:700;color:var(--sub);margin:12px 0 10px;">💪 مقاومة منزلية — 3 أيام فقط/أسبوع</div>'
+    +EXERCISES.resistance.map(function(ex){return exCard(ex,exDone);}).join('')
+
+    +'<div class="card card-amber" style="margin-top:4px;">'
+      +'<div style="font-size:13px;font-weight:700;color:var(--amber);margin-bottom:8px;">🎯 خطة الـ10,000 خطوة</div>'
+      +[['🌅','صباح','2,000 خطوة','تحركي في المنزل أثناء الروتين الصباحي'],['☀','ظهر','3,000 خطوة','جولة 20 دقيقة بعد الغداء'],['🌙','مساء','5,000 خطوة','أثناء رقصك أو مشيك المسائي']].map(function(a){return '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="font-size:16px;">'+a[0]+'</span><div><div style="font-size:13px;font-weight:700;color:var(--amber);">'+a[2]+'</div><div style="font-size:11px;color:var(--muted);">'+a[3]+'</div></div></div>';}).join('')
+    +'</div>'
+
+    +'<button class="btn-rose" style="margin-top:12px;" onclick="shareReport()">📤 شاركي رياضتك مع الدكتورة</button>'
+  +'</div>';
+}
+
+function renderMacros(){
+  var macros=[
+    {name:'بروتين',goal:'90-110غ',color:'#f43f5e',pct:85,detail:'بيض، دجاج، لحمة، تونة، جبنة، لبن',tip:'البروتين أهم شي! يساعد على الشبع وبناء العضلات.'},
+    {name:'كارب',goal:'150-200غ',color:'#f59e0b',pct:65,detail:'خبز أسمر، رز، شوفان، بطاطا',tip:'الكارب طاقة وليس عدو — اختاري النوع الصحي.'},
+    {name:'دهون',goal:'50-65غ',color:'#7c3aed',pct:70,detail:'زيت زيتون، لوز، فول سوداني، شوكولا داركة',tip:'الدهون الصحية ضرورية للهرمونات والشبع.'},
+    {name:'سعرات الهدف',goal:'1,300 سعرة',color:'#0d9488',pct:68,detail:'من أصل 1,900 سعرة (احتياجك الأساسي)',tip:'عجز 600 سعرة يومياً = خسارة آمنة ومستدامة.'}
+  ];
+
+  var summaryItems=[['🔥 السعرات الكلية','1,900','#f59e0b'],['🎯 هدف الخسارة','1,300','#f43f5e'],['💪 بروتين','90-110غ','#86efac'],['🌾 كارب','150-200غ','#fde68a'],['🫒 دهون','50-65غ','#c4b5fd'],['📉 عجز يومي','~600 سعرة','#5eead4']];
+
+  return '<div class="fade-in">'
+    +'<div class="section-title">📊 الماكروز والسعرات</div>'
+    +'<div class="card" style="margin-bottom:12px;background:linear-gradient(135deg,rgba(244,63,94,0.1),rgba(124,58,237,0.1));">'
+      +'<div style="font-size:13px;font-weight:700;color:var(--rose-light);margin-bottom:12px;">⚡ ملخص احتياجاتك اليومية</div>'
+      +'<div class="grid2">'+summaryItems.map(function(s){return '<div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:10px;text-align:center;"><div style="font-size:15px;font-weight:800;color:'+s[2]+';">'+s[1]+'</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">'+s[0]+'</div></div>';}).join('')+'</div>'
+    +'</div>'
+    +macros.map(function(m){return '<div class="card" style="margin-bottom:10px;border-color:'+m.color+'30;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><div style="font-size:14px;font-weight:700;color:'+m.color+';">'+m.name+'</div><span class="badge" style="background:'+m.color+'20;color:'+m.color+';border:1px solid '+m.color+'40;">'+m.goal+'</span></div><div class="macro-bar-wrap" style="margin-bottom:10px;"><div class="macro-bar" style="width:'+m.pct+'%;background:linear-gradient(90deg,'+m.color+'aa,'+m.color+');"></div></div><div style="font-size:12px;color:var(--muted);margin-bottom:6px;">📍 '+m.detail+'</div><div style="font-size:12px;color:var(--sub);background:rgba(255,255,255,0.04);border-radius:8px;padding:8px;">💡 '+m.tip+'</div></div>';}).join('')
+    +'<div class="tip-card" style="margin-top:4px;"><strong style="color:var(--rose-light);">🌟 نصائح الدكتورة:</strong><br>• 90-110غ بروتين يومياً — هذا أهم شيء 🥩<br>• لا تهملي أي وجبة بعد التمرين 💪<br>• 10 أكواب ماء يومياً 💧<br>• ستيفيا بدل السكر 🌿<br>• لا تمارين بطن تقليدية (كرنش/سيت أب) ⚠️</div>'
+  +'</div>';
+}
+
+function renderMotiv(){
+  var eveningTips=[
+    {emoji:'🌙',title:'وقتك الذهبي!',text:'المساء بين 5-9 أفضل وقت للرياضة. الجسم في ذروته الحرارية والطاقة!'},
+    {emoji:'💃',title:'قاعدة أغنية واحدة',text:'ما عندك مزاج؟ شغّلي أغنية واحدة بس. بعدها 90% من الناس يكملون!'},
+    {emoji:'📱',title:'حيلة الهاتف',text:'حطي ملابس الرياضة جنب سريرك كل ليلة — وجودها وحدها يحفّزك!'},
+    {emoji:'🎵',title:'بليست الرياضة',text:'جهّزي بليست مخصص للرياضة فقط. ربط الموسيقى بالرياضة يخليها متعة!'},
+    {emoji:'💧',title:'الماء والطاقة',text:'كوب ماء بارد قبل الرياضة بـ20 دقيقة = طاقة أكثر بـ30%!'}
+  ];
+  var mealTips=[
+    {emoji:'📸',title:'صوّري وجباتك',text:'صوّري الوجبة وأرسليها للدكتورة. هالخطوة وحدها تزيد الالتزام 40%!'},
+    {emoji:'🍳',title:'جهّزي مسبقاً',text:'30 دقيقة كل يوم لتحضير وجبات الغد. لما الأكل الصحي جاهز ما في مبرر!'},
+    {emoji:'💧',title:'الماء قبل الأكل',text:'كوب ماء قبل كل وجبة بـ20 دقيقة. يخفف الجوع ويساعد على أكل أقل!'},
+    {emoji:'🥗',title:'السلطة أولاً',text:'ابدئي كل غداء بالسلطة — تملأ المعدة بسعرات قليلة!'},
+    {emoji:'🌙',title:'عشاء خفيف',text:'الأكل الخفيف مساءً = نوم أفضل = تخسين أسرع!'}
+  ];
+
+  return '<div class="fade-in">'
+    +'<div class="section-title">🔥 حافزتك اليومية</div>'
+    +'<div style="margin-bottom:14px;">'
+    +MOTIVATIONS.map(function(m,i){return '<div class="mot-card" style="margin-bottom:10px;'+(i!==motIdx?'opacity:0.5;':'')+'"><div style="font-size:36px;margin-bottom:8px;">'+m.emoji+'</div><div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.6;">'+m.text+'</div></div>';}).join('')
+    +'</div>'
+    +'<div class="section-title">🌙 نصائح الرياضة المسائية</div>'
+    +eveningTips.map(function(t){return '<div class="card" style="margin-bottom:8px;"><div style="display:flex;align-items:center;gap:10px;"><div style="font-size:28px;">'+t.emoji+'</div><div><div style="font-size:13px;font-weight:700;color:var(--text);">'+t.title+'</div><div style="font-size:12px;color:var(--sub);margin-top:3px;line-height:1.5;">'+t.text+'</div></div></div></div>';}).join('')
+    +'<div class="section-title" style="margin-top:8px;">🍽 نصائح الالتزام بالوجبات</div>'
+    +mealTips.map(function(t){return '<div class="card card-teal" style="margin-bottom:8px;"><div style="display:flex;align-items:center;gap:10px;"><div style="font-size:28px;">'+t.emoji+'</div><div><div style="font-size:13px;font-weight:700;color:var(--teal-light);">'+t.title+'</div><div style="font-size:12px;color:var(--sub);margin-top:3px;line-height:1.5;">'+t.text+'</div></div></div></div>';}).join('')
+    +'<div class="card card-amber" style="margin-top:4px;"><div style="font-size:13px;font-weight:700;color:var(--amber);margin-bottom:8px;">⭐ أهداف الأسبوع</div>'
+    +['التزمي بالصيام المتقطع 5 أيام','ارقصي 30 دقيقة يومياً مسائياً','اشربي 10 أكواب ماء كل يوم','شاركي الدكتورة تقريرك يومياً','ما تفوّتي أي وجبة بعد الرياضة'].map(function(x){return '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px;color:var(--sub);">✅ '+x+'</div>';}).join('')
+    +'</div>'
+  +'</div>';
+}
+
+function toggleCh(id){var t=td();upd(id,!t[id]);if(!t[id])showToast('✅ تم التسجيل! 🌸');}
+function toggleMeal(key){var t=td();var mk='meal_'+key;upd(mk,!t[mk]);if(!t[mk])showToast('🍽 وجبة مسجّلة! 💚');}
+function toggleEx(id){var t=td();var arr=t.exDone||[];var next=arr.indexOf(id)>-1?arr.filter(function(x){return x!==id;}):[].concat(arr,[id]);upd('exDone',next);if(arr.indexOf(id)<0)showToast('💪 تمرين مكتمل! 🔥');}
+function setWater(v){upd('water',v);if(v>=WATER_GOAL)showToast('💧 أحسنتِ! 10 أكواب! 🎉');}
+function setDance(v){upd('dance',v);if(v>=DANCE_GOAL)showToast('💃 30 دقيقة رقص! يا بطلة! 🔥');}
+function setFasting(h){updMany({fastingHours:h,fasting:h>=16});}
+function nextMot(){motIdx=(motIdx+1)%MOTIVATIONS.length;render();}
+function openSteps(){document.getElementById('stepsModal').classList.remove('hidden');}
+function closeSteps(){document.getElementById('stepsModal').classList.add('hidden');}
+function saveSteps(){
+  var v=parseInt(document.getElementById('stepsInput').value);
+  if(v>0&&v<=50000){
+    upd('steps',v);
+    if(v>=STEPS_GOAL)showToast('🎉 10,000 خطوة! يا بطلة! 🔥');
+    else showToast('👟 '+v+' خطوة مسجّلة!');
+  }
+  closeSteps();
+}
+function selectDay(idx){selDay=idx;if(tab==='plan')render();}
+
+function buildReport(){
+  var t=td();
+  var steps=t.steps||0;
+  var water=t.water||0;
+  var dance=t.dance||0;
+  var exDone=t.exDone||[];
+  var meals=['breakfast','snack1','lunch','snack2','dinner'];
+  var mealNames={breakfast:'الفطور',snack1:'سناك 1',lunch:'الغداء',snack2:'سناك 2',dinner:'العشاء'};
+  var date=new Date().toLocaleDateString('ar-SA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  var mealLines=meals.map(function(m){return '  '+(t['meal_'+m]?'✅':'❌')+' '+mealNames[m];}).join('\n');
+  var exLines=exDone.length?exDone.map(function(id){
+    var all=EXERCISES.daily.concat(EXERCISES.rehab,EXERCISES.resistance,EXERCISES.dance);
+    var ex=null;for(var i=0;i<all.length;i++)if(all[i].id===id){ex=all[i];break;}
+    return '  ✅ '+(ex?ex.name:id);
+  }).join('\n'):'  ❌ لم تُسجَّل رياضة';
+  var chDone=CHALLENGES.filter(function(c){return t[c.id];}).length;
+  var chLines=CHALLENGES.map(function(c){return '  '+(t[c.id]?'✅':'❌')+' '+c.label;}).join('\n');
+
+  return '🌸 تقرير نايا اليومي\n'
+    +'📅 '+date+'\n'
+    +'─────────────────────────\n\n'
+    +'💧 الماء: '+water+'/10 أكواب '+(water>=WATER_GOAL?'✅':'⭕')+'\n'
+    +'💃 الرقص: '+dance+'/30 دقيقة '+(dance>=DANCE_GOAL?'✅':'⭕')+'\n'
+    +'👟 الخطوات: '+steps+'/10,000 '+(steps>=STEPS_GOAL?'✅':'⭕')+'\n'
+    +'⏰ الصيام: '+(t.fastingHours||0)+' ساعة '+((t.fastingHours||0)>=16?'✅':'⭕')+'\n\n'
+    +'🍽 الوجبات:\n'+mealLines+'\n\n'
+    +'💪 الرياضة:\n'+exLines+'\n\n'
+    +'✅ التحديات ('+chDone+'/7):\n'+chLines+'\n\n'
+    +'─────────────────────────\n'
+    +'👩‍⚕️ د. ميرنا | +963 991 863 344';
+}
+
+function shareReport(){window.open('https://wa.me/'+DR_PHONE+'?text='+encodeURIComponent(buildReport()),'_blank');}
+function shareDay(){
+  var dayPlan=PLAN[selDay]||PLAN[0];
+  var t=td();
+  var meals=['breakfast','snack1','lunch','snack2','dinner'];
+  var mealNames={breakfast:'الفطور',snack1:'سناك 1',lunch:'الغداء',snack2:'سناك 2',dinner:'العشاء'};
+  var lines=meals.map(function(m){return (t['meal_'+m]?'✅':'❌')+' '+mealNames[m];}).join('\n');
+  var text='🌸 وجبات نايا — '+dayPlan.label+'\n────────────────────\n'+lines+'\n────────────────────\n👩‍⚕️ د. ميرنا | +963 991 863 344';
+  window.open('https://wa.me/'+DR_PHONE+'?text='+encodeURIComponent(text),'_blank');
+}
+
+function showToast(msg){var el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(function(){el.classList.remove('show');},2500);}
+
+setInterval(function(){if(tab==='home')render();},60000);
+render();
+</script>
+</body>
+</html>
